@@ -1,0 +1,15 @@
+# Ignore node_modules folder
+node_modules/
+
+# Ignore compiled JavaScript files if you're using TypeScript (adjust the folder as needed)
+dist/
+
+# Logs
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+#Ignore environment variable files
+.env

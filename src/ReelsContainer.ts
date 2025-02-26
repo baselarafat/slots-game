@@ -1,14 +1,15 @@
-import * as PIXI from "pixi.js";
+import { Application, Container, Ticker } from 'pixi.js';
 import { Reel } from "./Reel";
+import { SlotSymbol } from "./Symbols";
 
 export default class ReelsContainer {
-  public container: PIXI.Container;
+  public container: Container;
   private reels: Reel[];
   private reelWidth: number;
   private reelHeight: number;
 
-  constructor(app: PIXI.Application) {
-    this.container = new PIXI.Container();
+  constructor(app: Application) {
+    this.container = new Container();
     this.reels = [];
     this.reelWidth = app.screen.width / 3;
     this.reelHeight = 400;
@@ -18,8 +19,10 @@ export default class ReelsContainer {
       const reel = new Reel(i * this.reelWidth, 0, this.reelWidth, this.reelHeight);
       this.reels.push(reel);
       this.container.addChild(reel.container);
-      // Register each reel's update with the app ticker.
-      app.ticker.add((delta) => reel.update(delta));
+      // Add ticker callback that receives the ticker instance.
+      app.ticker.add((ticker: Ticker) => {
+        reel.update(ticker.deltaTime);
+      });
     }
   }
 
@@ -41,7 +44,8 @@ export default class ReelsContainer {
     });
   }
 
-  public getResultSymbols(): string[] {
+  public getResultSymbols(): SlotSymbol[] {
+    // Ensure we return an array of SlotSymbol
     return this.reels.map(reel => reel.targetSymbol);
   }
 }
